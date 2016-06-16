@@ -35,7 +35,8 @@ def get_output(output_cmd, *patterns):
             yield line
 
 
-# Enable or disable the USB smartphone charging only
+# Enable or disable the USB smartphone charging (USB CHARGING ONLY - not data
+# transmission)
 def enable_usb_charging(enable=True):
     status_charge = "1" if enable else "0"
     command = "adb shell \"echo %s >\
