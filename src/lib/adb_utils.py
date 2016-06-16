@@ -59,14 +59,14 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
         seed = str(random.randint(0, MAX_32_BITS))
     # '--pct-majornav' option to 0 -> disable navigation actions
     # 'events' MUST be the last parameter to set!
-    return call_shell_command("monkey", package,
-                              "-s", seed,
-                              "-v",
-                              "--throttle", throttle,
-                              "--pct-majornav", "50",
-                              "--pct-syskeys", "0",
-                              "--kill-process-after-error",
-                              events)
+    return (seed, call_shell_command("monkey", package,
+                                     "-s", seed,
+                                     "-v",
+                                     "--throttle", throttle,
+                                     "--pct-majornav", "50",
+                                     "--pct-syskeys", "0",
+                                     "--kill-process-after-error",
+                                     events))
 
 
 # Call an ADB command via this function
