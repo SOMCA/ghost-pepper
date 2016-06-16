@@ -21,9 +21,10 @@ SHELL_COMMANDS = {
 MAX_32_BITS = 2**32
 
 
-# Get the output of an ADB command, to display and analyse it in the program
-# The parameter 'patterns' can contains a regex to search usefull informations
-# in the output - default is None.
+# Get the output of an ADB command, to display and analyse it in the program.
+# Parameters:
+# * output_cmd: the result of an adb or shell command
+# * patterns: a regex to search usefull informations from the output
 def get_output(output_cmd, *patterns):
     while True:
         # Clear the line
@@ -48,10 +49,12 @@ def enable_usb_charging(enable=True):
 # * seed    : the seed of the monkey test to run
 # * events  : the number of events
 # * throttle: a fixed delay between events
+# This function returns the seed and the result of the command
 def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
     if not package:
         print("No package to run!")
         return None
+    # Random seed if no one has been given as parameter
     if not seed:
         seed = str(random.randint(0, MAX_32_BITS))
     # '--pct-majornav' option to 0 -> disable navigation actions
@@ -60,6 +63,9 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
 
 
 # Call an ADB command via this function
+# Parameters:
+# * ADB_CMD: the ADB command to launch
+# * CMD_ARGS: command parameters
 def call_adb_command(ADB_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
     if not (ADB_CMD in ADB_COMMANDS):
         print("No command %s as an adb command!" % ADB_CMD)
@@ -69,6 +75,9 @@ def call_adb_command(ADB_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
 
 
 # Call a SHELL command via this function
+# Parameters:
+# * SHELL_CMD: the SHELL command to launch
+# * CMD_ARGS: command parameters
 def call_shell_command(SHELL_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
     if not (SHELL_CMD in SHELL_COMMANDS):
         print("No command %s as an adb command!" % SHELL_CMD)
