@@ -26,6 +26,10 @@ def count_global_cs(output):
     return logcount
 
 
+# Rank monkey seeds according to the number of code smells called during their
+# execution
+# This function returns the first three seeds (descending order), for each code
+# smell and for the sum of all these code smells
 def rank(values):
     top_3 = defaultdict(list)
     for cod_sm in CODE_SMELLS:
