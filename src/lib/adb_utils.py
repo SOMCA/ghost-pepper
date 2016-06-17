@@ -6,8 +6,7 @@ import random
 # Contains available ADB commands
 ADB_COMMANDS = {
     "devices": ["devices"],
-    "log": ["logcat", "-d"],
-    "logc": ["logcat", "-c"],
+    "log": ["logcat"],
     "root": ["root"],
 }
 
@@ -15,6 +14,8 @@ ADB_COMMANDS = {
 SHELL_COMMANDS = {
     "monkey": ["monkey", "-p"],
     "pkg": ["pm", "list", "packages"],
+    "reset": ["pm", "clear"],
+    "stop": ["am", "force-stop"],
 }
 
 # MAXIMUM NUMBER FOR 32 BITS ARCHITECTURE
@@ -28,7 +29,10 @@ MAX_32_BITS = 2**32
 def get_output(output_cmd, *patterns):
     while True:
         # Clear the line
-        line = output_cmd.stdout.readline().decode('ascii').strip()
+        try:
+            line = output_cmd.stdout.readline().decode('ascii').strip()
+        except Exception as e:
+            print("Exception raised: {0}".format(e))
         if not line:
             break
         if not patterns or any(pattern in line for pattern in patterns):
@@ -55,17 +59,22 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
     if not package:
         print("No package to run!")
         return None
+    if package.startswith("package:"):
+        package = package[8:]
     # Random seed if no one has been given as parameter
     if not seed:
         seed = str(random.randint(0, MAX_32_BITS))
-    # '--pct-majornav' option to 0 -> disable navigation actions
-    # 'events' MUST be the last parameter to set!
     return (seed, call_shell_command("monkey", package,
                                      "-s", seed,
                                      "-v",
                                      "--throttle", throttle,
-                                     "--pct-majornav", "50",
+                                     "--pct-majornav", "40",
                                      "--pct-syskeys", "0",
+                                     "--pct-touch", "30",
+                                     "--pct-nav", "10",
+                                     "--pct-appswitch", "0",
+                                     "--pct-anyevent", "0",
+                                     "--pct-motion", "20",
                                      "--kill-process-after-error",
                                      events))
 
@@ -78,7 +87,8 @@ def call_adb_command(ADB_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
     if not (ADB_CMD in ADB_COMMANDS):
         print("No command %s as an adb command!" % ADB_CMD)
         return None
-    return Popen(["adb", ADB_CMD, " ".join([s_arg for s_arg in CMD_ARGS])],
+    JADB_CMD = " ".join(ADB_COMMANDS[ADB_CMD])
+    return Popen(["adb", JADB_CMD, " ".join([s_arg for s_arg in CMD_ARGS])],
                  shell=shell, stdout=stdout)
 
 
