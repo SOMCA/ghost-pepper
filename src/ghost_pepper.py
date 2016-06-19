@@ -6,7 +6,7 @@ from lib.progress_bar import ProgressBar
 from time import sleep
 
 
-APP = "org.bottiger.podcast"
+APP = "my.package"
 
 
 ITERATION = 10
