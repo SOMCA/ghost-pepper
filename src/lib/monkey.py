@@ -7,7 +7,10 @@ PACKAGE = ":AllowPackage:"
 START_OF_INTENT = "Allowing start of Intent"
 
 
-EVENT_PERCENTAGES = "Event percentages"
+NUMBER_EVENTS = "Events injected:"
+
+
+EVENT_PERCENTAGES = "Event percentages:"
 
 
 DURATION = "## Network stats:"
@@ -32,7 +35,6 @@ class IntentDetails():
     def __init__(self, output_line):
         splitted_output_line = output_line.split(" ")
         for splitted_part in splitted_output_line:
-            splitted_part = splitted_part.strip()
             if splitted_part.startswith("act"):
                 self._act = splitted_part[4:]
             elif splitted_part.startswith("cat"):
@@ -42,13 +44,27 @@ class IntentDetails():
 
     # For Set comparison
     def __eq__(self, other):
-        return (self._act == other._act) and\
-               (self._cat == other._cat) and\
-               (self._cmp == other._cmp)
+        bool_r = (self._cmp == other._cmp)
+        if hasattr(self, "_act") and hasattr(other, "_act"):
+            bool_r = bool_r and (self._act == other._act)
+        elif hasattr(self, "_act") and not hasattr(other, "_act") or\
+             not hasattr(self, "_act") and hasattr(other, "_act"):
+            return False
+        if hasattr(self, "_cat") and hasattr(other, "_cat"):
+            bool_r = bool_r and (self._cat == other._cat)
+        elif hasattr(self, "_cat") and not hasattr(other, "_cat") or\
+             not hasattr(self, "_cat") and hasattr(other, "_cat"):
+            return False
+        return bool_r
 
     # For Set comparison
     def __hash__(self):
-        return (hash(self._act) & hash(self._cat) & hash(self._cmp))
+        hash_r = hash(self._cmp)
+        if hasattr(self, "_act"):
+            hash_r &= hash(self._act)
+        if hasattr(self, "_cat"):
+            hash_r &= hash(self._cat)
+        return hash_r
 
 
 class MonkeyDetails():
@@ -60,6 +76,7 @@ class MonkeyDetails():
         # self._wifi_duration = 0
         # self._mobile_duration = 0
         self._total_duration = ""
+        self._number_events = ""
         self.parseDetails(output)
 
     def parseDetails(self, output):
@@ -86,9 +103,12 @@ class MonkeyDetails():
                 splitted_e = splitted_e.split("(")[0].strip()
                 if splitted_e.startswith("elapsed time="):
                     self._total_duration = splitted_e[13:]
+            elif NUMBER_EVENTS in output_line:
+                self._number_events = output_line.split(NUMBER_EVENTS)[1].strip()
 
     def __str__(self):
         to_return = "Package %s\n" % self._package
+        to_return += "Number of events injected: %s\n" % self._number_events
         to_return += "Events:\n"
         for event in MonkeyEvent:
             to_return += "\t* {0}: {1}%\n".format(
