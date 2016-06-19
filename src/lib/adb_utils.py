@@ -66,7 +66,7 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
         seed = str(random.randint(0, MAX_32_BITS))
     return (seed, call_shell_command("monkey", package,
                                      "-s", seed,
-                                     "-v",
+                                     "-v", "-v", "-v",
                                      "--throttle", throttle,
                                      "--pct-majornav", "40",
                                      "--pct-syskeys", "0",
