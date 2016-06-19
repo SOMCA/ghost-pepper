@@ -32,6 +32,7 @@ def count_global_cs(output):
 # smell and for the sum of all these code smells
 def rank(values):
     top_3 = defaultdict(list)
+    set_top_3 = set()
     for cod_sm in CODE_SMELLS:
         top_3[cod_sm] = list(sorted(values, key=lambda t: t[1][cod_sm],
                              reverse=True))[0:3]
@@ -42,3 +43,6 @@ def rank(values):
         print("#" * (C_LINE_PREZ + len(key) + 1))
         for value in values:
             print("\tSEED %s - %d calls" % (value[0], value[1][key]))
+            set_top_3.add(value[0])
+
+    return set_top_3
