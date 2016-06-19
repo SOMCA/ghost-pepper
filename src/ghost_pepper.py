@@ -21,7 +21,7 @@ def main():
         log_thread = call_adb_command("log", "-c")
         log_thread.wait()
         (seed, monkey_thread) = launch_monkey_event(APP,
-                                                    events="100",
+                                                    events="1000",
                                                     throttle="300")
         monkey_thread.wait()
         monkey_output = get_output(monkey_thread)
