@@ -1,11 +1,12 @@
 from lib.adb_utils import call_adb_command, get_output,\
      launch_monkey_event, call_shell_command
 from lib.count import count_global_cs, rank
+from lib.monkey import MonkeyDetails
 from lib.progress_bar import ProgressBar
 from time import sleep
 
 
-APP = "my.package"
+APP = "org.bottiger.podcast"
 
 
 ITERATION = 10
@@ -20,9 +21,11 @@ def main():
         log_thread = call_adb_command("log", "-c")
         log_thread.wait()
         (seed, monkey_thread) = launch_monkey_event(APP,
-                                                    events="1000",
+                                                    events="100",
                                                     throttle="300")
         monkey_thread.wait()
+        monkey_output = get_output(monkey_thread)
+        print(MonkeyDetails(monkey_output))
         output = get_output(call_adb_command("log", "-d"))
         global_count = count_global_cs(output)
         values.append((seed, global_count))
