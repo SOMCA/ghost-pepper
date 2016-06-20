@@ -81,7 +81,8 @@ class MonkeyDetails():
 
     def parseDetails(self, output):
         event_percentages_bool = False
-        for output_line in output:
+        for output_line in output.splitlines():
+            output_line = output_line.decode('utf-8')
             if event_percentages_bool:
                 try:
                     splitted_e = output_line.split("//")[1].strip().split(":")
