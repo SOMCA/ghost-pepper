@@ -24,10 +24,9 @@ def main():
         log_thread = call_adb_command("log", "-c")
         log_thread.wait()
         (seed, monkey_thread) = launch_monkey_event(APP,
-                                                    events="1000",
-                                                    throttle="300")
-        monkey_thread.wait()
-        monkey_output = get_output(monkey_thread)
+                                                    events="10000",
+                                                    throttle="0")
+        monkey_output, _ = monkey_thread.communicate()
         output = get_output(call_adb_command("log", "-d"))
         global_count = count_global_cs(output)
         values.append((seed, global_count))
