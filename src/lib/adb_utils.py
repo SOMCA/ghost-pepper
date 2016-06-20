@@ -30,7 +30,7 @@ def get_output(output_cmd, *patterns):
     while True:
         # Clear the line
         try:
-            line = output_cmd.stdout.readline().decode('ascii').strip()
+            line = output_cmd.stdout.readline().decode('utf-8').strip()
         except Exception as e:
             print("Exception raised: {0}".format(e))
         if not line:
@@ -64,6 +64,7 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
     # Random seed if no one has been given as parameter
     if not seed:
         seed = str(random.randint(0, MAX_32_BITS))
+
     return (seed, call_shell_command("monkey", package,
                                      "-s", seed,
                                      "-v", "-v", "-v",
@@ -103,4 +104,4 @@ def call_shell_command(SHELL_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
     JSHELL_CMD = " ".join(SHELL_COMMANDS[SHELL_CMD])
     return Popen(["adb", "shell", JSHELL_CMD,
                   " ".join([s_arg for s_arg in CMD_ARGS])],
-                 shell=shell, stdout=stdout)
+                 shell=shell, stdout=stdout, stderr=PIPE)
