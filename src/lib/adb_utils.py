@@ -85,7 +85,8 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
                                events))
 
 
-# Enable or disable SIMIASQUE
+# Enable or disable SIMIASQUE - SIMIASQUE is a tool to disable top-to-bottom
+# interations using Monkey
 # Parameter:
 # * boolean: True to enable SIMIASQUE, else False
 def enable_simiasque(boolean=True):
