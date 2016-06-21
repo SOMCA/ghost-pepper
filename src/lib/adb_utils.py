@@ -17,8 +17,8 @@ SHELL_COMMANDS = {
     "reset": ["pm", "clear"],
     "stop": ["am", "force-stop"],
     "simiasque": ["am", "broadcast", "-a",
-                   "org.thisisafactory.simiasque.SET_OVERLAY", "--ez",
-                   "enable"],
+                  "org.thisisafactory.simiasque.SET_OVERLAY", "--ez",
+                  "enable"],
 }
 
 # MAXIMUM NUMBER FOR 32 BITS ARCHITECTURE
