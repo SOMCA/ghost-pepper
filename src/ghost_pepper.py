@@ -25,6 +25,11 @@ def main():
                       default="100000")
     args.add_argument("-t", "--throttle", help="Delay between each event",
                       default="0")
+    args.add_argument("-o", "--only_one", help="Return only one seed - the \
+                      greatest number of code smells called",
+                      action="store_true")
+    args.add_argument("-v", "--verbose", help="Verbose mod for top seeds",
+                      action="store_true")
     args = args.parse_args()
 
     values = []
@@ -38,8 +43,8 @@ def main():
         log_thread = call_command("log", "-c")
         log_thread.wait()
         (seed, monkey_thread) = launch_monkey_event(APP,
-                                                    events="10000",
-                                                    throttle="0")
+                                                    events=args.events,
+                                                    throttle=args.throttle)
         monkey_output, _ = monkey_thread.communicate()
         output = get_output(call_command("log", "-d"))
         global_count = count_global_cs(output)
@@ -57,10 +62,13 @@ def main():
     enable_simiasque(False)
     set_top_3 = rank(values)
 
-    for seed in set_top_3:
-        print("SEED %s" % seed)
-        print(seed_to_details[seed])
-        print("#"*40)
+    if args.only_one:
+        print("The best seed is %s" % set_top_3["TOTAL"][0])
+    elif args.verbose:
+        for seed in set_top_3:
+            print("SEED %s" % seed)
+            print(seed_to_details[seed])
+            print("#"*40)
 
 
 if __name__ == '__main__':
