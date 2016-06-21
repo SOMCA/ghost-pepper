@@ -16,12 +16,9 @@ SHELL_COMMANDS = {
     "pkg": ["pm", "list", "packages"],
     "reset": ["pm", "clear"],
     "stop": ["am", "force-stop"],
-    "Esimiasque": ["am", "broadcast", "-a",
+    "simiasque": ["am", "broadcast", "-a",
                    "org.thisisafactory.simiasque.SET_OVERLAY", "--ez",
-                   "enable", "true"],
-    "Dsimiasque": ["am", "broadcast", "-a",
-                   "org.thisisafactory.simiasque.SET_OVERLAY", "--ez",
-                   "enable", "false"],
+                   "enable"],
 }
 
 # MAXIMUM NUMBER FOR 32 BITS ARCHITECTURE
