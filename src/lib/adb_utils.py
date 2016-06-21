@@ -65,43 +65,34 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
     if not seed:
         seed = str(random.randint(0, MAX_32_BITS))
 
-    return (seed, call_shell_command("monkey", package,
+    return (seed, call_command("monkey", package,
                                      "-s", seed,
                                      "-v", "-v", "-v",
                                      "--throttle", throttle,
-                                     "--pct-majornav", "40",
+                                     "--pct-majornav", "0",
                                      "--pct-syskeys", "0",
-                                     "--pct-touch", "30",
-                                     "--pct-nav", "10",
+                                     "--pct-touch", "50",
+                                     "--pct-nav", "0",
                                      "--pct-appswitch", "0",
                                      "--pct-anyevent", "0",
-                                     "--pct-motion", "20",
+                                     "--pct-motion", "50",
                                      "--kill-process-after-error",
                                      events))
 
 
-# Call an ADB command via this function
+# Call an ADB/SHELL command via this function
 # Parameters:
-# * ADB_CMD: the ADB command to launch
+# * CMD: the ADB/SHELL command to launch
 # * CMD_ARGS: command parameters
-def call_adb_command(ADB_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
-    if not (ADB_CMD in ADB_COMMANDS):
-        print("No command %s as an adb command!" % ADB_CMD)
+def call_command(CMD, *CMD_ARGS, shell=False, stdout=PIPE):
+    if not (CMD in ADB_COMMANDS) and not (CMD in SHELL_COMMANDS):
+        print("No command %s as an adb/shell command!" % CMD)
         return None
-    JADB_CMD = " ".join(ADB_COMMANDS[ADB_CMD])
-    return Popen(["adb", JADB_CMD, " ".join([s_arg for s_arg in CMD_ARGS])],
-                 shell=shell, stdout=stdout)
-
-
-# Call a SHELL command via this function
-# Parameters:
-# * SHELL_CMD: the SHELL command to launch
-# * CMD_ARGS: command parameters
-def call_shell_command(SHELL_CMD, *CMD_ARGS, shell=False, stdout=PIPE):
-    if not (SHELL_CMD in SHELL_COMMANDS):
-        print("No command %s as an adb command!" % SHELL_CMD)
-        return None
-    JSHELL_CMD = " ".join(SHELL_COMMANDS[SHELL_CMD])
-    return Popen(["adb", "shell", JSHELL_CMD,
-                  " ".join([s_arg for s_arg in CMD_ARGS])],
+    command_list = ["adb"]
+    if CMD in SHELL_COMMANDS[CMD]:
+        command_list.append(command_list)
+    J_CMD = " ".join(ADB_COMMANDS[CMD]) if (CMD in ADB_COMMANDS) else " ".join(SHELL_COMMANDS[CMD])
+    command_list.append(J_CMD)
+    command_list.append(" ".join([s_arg for s_arg in CMD_ARGS]))
+    return Popen(command_list,
                  shell=shell, stdout=stdout, stderr=PIPE)
