@@ -65,19 +65,21 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
     if not seed:
         seed = str(random.randint(0, MAX_32_BITS))
 
-    return (seed, call_command("monkey", package,
-                                     "-s", seed,
-                                     "-v", "-v", "-v",
-                                     "--throttle", throttle,
-                                     "--pct-majornav", "0",
-                                     "--pct-syskeys", "0",
-                                     "--pct-touch", "50",
-                                     "--pct-nav", "0",
-                                     "--pct-appswitch", "0",
-                                     "--pct-anyevent", "0",
-                                     "--pct-motion", "50",
-                                     "--kill-process-after-error",
-                                     events))
+    return (seed, call_command("monkey",
+                               package,
+                               "-s",
+                               seed,
+                               "-v", "-v", "-v",
+                               "--throttle", throttle,
+                               "--pct-majornav", "0",
+                               "--pct-syskeys", "0",
+                               "--pct-touch", "50",
+                               "--pct-nav", "0",
+                               "--pct-appswitch", "0",
+                               "--pct-anyevent", "0",
+                               "--pct-motion", "50",
+                               "--kill-process-after-error",
+                               events))
 
 
 # Call an ADB/SHELL command via this function
