@@ -101,7 +101,6 @@ class MonkeyDetails():
                     continue
                 except:
                     event_percentages_bool = False
-            # The following line IS NOT a 'ELIF/ELSE' statement
             if START_OF_INTENT in output_line:
                 self._intents.add(IntentDetails(output_line))
             elif EVENT_PERCENTAGES in output_line:
@@ -114,7 +113,9 @@ class MonkeyDetails():
                 if splitted_e.startswith("elapsed time="):
                     self._total_duration = splitted_e[13:]
             elif NUMBER_EVENTS in output_line:
-                self._number_events = output_line.split(NUMBER_EVENTS)[1].strip()
+                self._number_events = output_line\
+                                        .split(NUMBER_EVENTS)[1]\
+                                        .strip()
 
     def __str__(self):
         to_return = "Package %s\n" % self._package
