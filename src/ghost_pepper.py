@@ -1,5 +1,5 @@
 from lib.adb_utils import call_command, get_output,\
-     launch_monkey_event
+     launch_monkey_event, enable_simiasque
 from lib.count import count_global_cs, rank
 from lib.monkey import MonkeyDetails
 from lib.progress_bar import ProgressBar
@@ -20,6 +20,8 @@ def main():
     bar.update(0)
     bar_step = 100/ITERATION
     seed_to_details = defaultdict()
+    enable_simiasque(True)
+
     for i in range(ITERATION):
         log_thread = call_command("log", "-c")
         log_thread.wait()
@@ -40,6 +42,7 @@ def main():
 
         sleep(5)
 
+    enable_simiasque(False)
     set_top_3 = rank(values)
 
     for seed in set_top_3:
