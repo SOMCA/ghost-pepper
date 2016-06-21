@@ -85,6 +85,14 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
                                events))
 
 
+# Enable or disable SIMIASQUE
+# Parameter:
+# * boolean: True to enable SIMIASQUE, else False
+def enable_simiasque(boolean=True):
+    return call_command("simiasque", "true") if boolean\
+           else call_command("simiasque", "false")
+
+
 # Call an ADB/SHELL command via this function
 # Parameters:
 # * CMD: the ADB/SHELL command to launch
