@@ -97,10 +97,9 @@ def call_command(CMD, *CMD_ARGS, shell=False, stdout=PIPE):
         print("No command %s as an adb/shell command!" % CMD)
         return None
     command_list = ["adb"]
-    if CMD in SHELL_COMMANDS[CMD]:
-        command_list.append(command_list)
-    J_CMD = " ".join(ADB_COMMANDS[CMD]) if (CMD in ADB_COMMANDS) else " ".join(SHELL_COMMANDS[CMD])
-    command_list.append(J_CMD)
-    command_list.append(" ".join([s_arg for s_arg in CMD_ARGS]))
+    if CMD in SHELL_COMMANDS:
+        command_list.append("shell")
+    J_CMD = ADB_COMMANDS[CMD] if (CMD in ADB_COMMANDS) else SHELL_COMMANDS[CMD]
+    command_list += J_CMD + list(CMD_ARGS)
     return Popen(command_list,
                  shell=shell, stdout=stdout, stderr=PIPE)
