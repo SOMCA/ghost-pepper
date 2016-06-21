@@ -9,7 +9,7 @@ Requirements
 You have to install Simiasque on your phone for using **Ghost-Pepper**.
 
 **Ghost Pepper** works on a verbose application, which can save in a log
-message each time a code smell has been called.  
+message each time a code smell is called.  
 Each log has to been formatted like this: "SMELL: MY.CODE.SMELL", as a **debug
 log message**.  
 If you don't have this verbose application, please to use **Paprika**,
