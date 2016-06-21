@@ -16,6 +16,7 @@ EVENT_PERCENTAGES = "Event percentages:"
 DURATION = "## Network stats:"
 
 
+# MonkeyEvent is a suite of Android events
 class MonkeyEvent(Enum):
     TOUCH = 0
     MOTION = 1
@@ -30,6 +31,10 @@ class MonkeyEvent(Enum):
     ANYEVENT = 10
 
 
+# IntentDetails is an object to parse and get some details about intents in an
+# Android application
+# An intent is describe by a "cmp" key - it can also have an "act" and "cat"
+# description
 class IntentDetails():
 
     def __init__(self, output_line):
@@ -67,6 +72,10 @@ class IntentDetails():
         return hash_r
 
 
+# MonkeyDetails is an object to get all available informations about a Monkey
+# run
+# Those informations are obtained parsing the output of the "monkey" command
+# (see parseDetails method)
 class MonkeyDetails():
 
     def __init__(self, output):
