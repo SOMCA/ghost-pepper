@@ -5,7 +5,8 @@ ranked based code smells counting
 Requirements
 ------------
 
-**Ghost Pepper** uses Python3.5 and [Simiasque](https://github.com/k0pernicus/simiasque) to work.
+**Ghost Pepper** uses Python3.5 and [Simiasque](https://github.com/k0pernicus/simiasque) to work.  
+You have to install Simiasque on your phone for using **Ghost-Pepper**.
 
 **Ghost Pepper** works on a verbose application, which can save in a log
 message each time a code smell has been called.  
