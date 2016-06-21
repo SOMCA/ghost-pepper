@@ -4,6 +4,7 @@ from lib.count import count_global_cs, rank
 from lib.monkey import MonkeyDetails
 from lib.progress_bar import ProgressBar
 
+from argparse import ArgumentParser
 from collections import defaultdict
 from time import sleep
 
@@ -15,6 +16,17 @@ ITERATION = 10
 
 
 def main():
+
+    # Parse program arguments
+    args = ArgumentParser(description="Tool to create automatically \
+                          Monkey-based scenarios, \
+                          ranked based code smells counting")
+    args.add_argument("-e", "--events", help="Number of events to process",
+                      default="100000")
+    args.add_argument("-t", "--throttle", help="Delay between each event",
+                      default="0")
+    args = args.parse_args()
+
     values = []
     bar = ProgressBar(100, 100, "PROGRESSING...")
     bar.update(0)
