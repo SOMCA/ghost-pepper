@@ -8,29 +8,39 @@ from argparse import ArgumentParser
 from collections import defaultdict
 from time import sleep
 
+import threading
 
 APP = "my.package"
 
+# Python class to launch a thread to parse logcat and to stop it when it is
+# possible
+class LogcatProcessThread(threading.Thread):
 
-ITERATION = 10
+    def __init__(self):
+        super(LogcatProcessThread, self).__init__()
+        self._stop = threading.Event()
+        self._data = []
+        t = threading.Thread(target=self.run_process)
+        t.start()
 
+    # Method to know if the thread is stopped or not
+    def is_stopped(self):
+        self._stop.is_set()
 
-def main():
+    # Parse logcat during it entire lifetime
+    def run_process(self):
+        # While the stop event hasn't been set...
+        while not self.is_stopped():
+            for line in get_output(call_command("log", "-d")):
+                self._data.append(line.strip())
+            clear_log_thread = call_command("log", "-c")
+            clear_log_thread.wait()
+            # Wait for 3 seconds before parsing the next state
+            sleep(3)
 
-    # Parse program arguments
-    args = ArgumentParser(description="Tool to create automatically \
-                          Monkey-based scenarios, \
-                          ranked based code smells counting")
-    args.add_argument("-e", "--events", help="Number of events to process",
-                      default="100000")
-    args.add_argument("-t", "--throttle", help="Delay between each event",
-                      default="0")
-    args.add_argument("-o", "--only_one", help="Return only one seed - the \
-                      greatest number of code smells called",
-                      action="store_true")
-    args.add_argument("-v", "--verbose", help="Verbose mod for top seeds",
-                      action="store_true")
-    args = args.parse_args()
+    # Stop the thread
+    def stop(self):
+        self._stop.set()
 
     values = []
     bar = ProgressBar(100, 100, "PROGRESSING...")
