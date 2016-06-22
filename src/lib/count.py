@@ -45,4 +45,4 @@ def rank(values):
             print("\tSEED %s - %d calls" % (value[0], value[1][key]))
             set_top_3.add(value[0])
 
-    return set_top_3
+    return set_top_3, top_3["TOTAL"][0][0]
