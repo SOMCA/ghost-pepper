@@ -70,16 +70,39 @@ class LogcatProcessThread(threading.Thread):
         sleep(5)
 
     enable_simiasque(False)
-    set_top_3 = rank(values)
+
+def main():
+
+    # Parse program arguments
+    args = ArgumentParser(description="Tool to create automatically \
+                          Monkey-based scenarios, \
+                          ranked based code smells counting")
+    args.add_argument("-e", "--events", help="Number of events to process",
+                      default="100000")
+    args.add_argument("-i", "--iterations", help="Number of iterations",
+                      type=int, default=50)
+    args.add_argument("-o", "--only_one", help="Return only one seed - the \
+                      greatest number of code smells called",
+                      action="store_true")
+    args.add_argument("-p", "--package", help="The Android package to run",
+                      required=True)
+    args.add_argument("-t", "--throttle", help="Delay between each event",
+                      default="0")
+    args.add_argument("-v", "--verbose", help="Verbose mod for top seeds",
+                      action="store_true")
+    args = args.parse_args()
+
+    # Run INSTANCES instances, where each instance contains differents values
+    # of events percentage
+    ((set_top_3, top_seed), seed_to_details) = run_an_instance(args)
 
     if args.only_one:
-        print("The best seed is %s" % set_top_3["TOTAL"][0])
+        print("The best seed is {0}".format(top_seed))
     elif args.verbose:
         for seed in set_top_3:
             print("SEED %s" % seed)
             print(seed_to_details[seed])
             print("#"*40)
-
 
 if __name__ == '__main__':
     main()
