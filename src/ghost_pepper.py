@@ -10,7 +10,6 @@ from time import sleep
 
 import threading
 
-APP = "my.package"
 
 # Python class to launch a thread to parse logcat and to stop it when it is
 # possible
@@ -42,21 +41,34 @@ class LogcatProcessThread(threading.Thread):
     def stop(self):
         self._stop.set()
 
+
+# This function run an instance, which is ITERATIONS launch of Monkey
+# This function returns the top 3 of seeds for each code smell
+def run_an_instance(args):
+
     values = []
     bar = ProgressBar(100, 100, "PROGRESSING...")
     bar.update(0)
-    bar_step = 100/ITERATION
+    bar_step = 100/args.iterations
     seed_to_details = defaultdict()
     enable_simiasque(True)
+    APP = args.package
 
-    for i in range(ITERATION):
+    for i in range(args.iterations):
+        # Go on crazy Monkey!
         log_thread = call_command("log", "-c")
         log_thread.wait()
+        # Launch get_logcat and get logs as output
+        logcat_object = LogcatProcessThread()
         (seed, monkey_thread) = launch_monkey_event(APP,
                                                     events=args.events,
                                                     throttle=args.throttle)
+        # Get the status of the current output from monkey_thread
         monkey_output, _ = monkey_thread.communicate()
-        output = get_output(call_command("log", "-d"))
+        # If Monkey is done, set the event to True
+        logcat_object.stop()
+        output = logcat_object._data
+        # Parse things...
         global_count = count_global_cs(output)
         values.append((seed, global_count))
         seed_to_details[seed] = MonkeyDetails(monkey_output)
@@ -67,9 +79,14 @@ class LogcatProcessThread(threading.Thread):
         reset_thread.wait()
         bar.update((i + 1) * bar_step)
 
+        # Delete the logcat object
+        del logcat_object
+
         sleep(5)
 
     enable_simiasque(False)
+    return (rank(values), seed_to_details)
+
 
 def main():
 
