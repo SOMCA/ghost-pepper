@@ -23,10 +23,33 @@ How to use it?
 
 1.  Connect your phone to your computer.
 2.  Allow developer options in your phone.
-3.  Get the application's package you want to get scenarios, and replace the field
-    `APP` (in `ghost_pepper.py`) with the package name of your application.
-4.  Launch the program, sip a cocktail and get the list of
+3.  Launch the program, sip a cocktail and get the list of
 monkey seeds that run a lot of code smells!
+
+Arguments
+---------
+
+```
+usage: ghost_pepper.py [-h] [-e EVENTS] [-i ITERATIONS] [-o] -p PACKAGE
+                       [-t THROTTLE] [-v]
+
+Tool to create automatically Monkey-based scenarios, ranked based code smells
+counting
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -e EVENTS, --events EVENTS
+                        Number of events to process
+  -i ITERATIONS, --iterations ITERATIONS
+                        Number of iterations
+  -o, --only_one        Return only one seed - the greatest number of code
+                        smells called
+  -p PACKAGE, --package PACKAGE
+                        The Android package to run
+  -t THROTTLE, --throttle THROTTLE
+                        Delay between each event
+  -v, --verbose         Verbose mod for top seeds
+```
 
 Credits
 -------
