@@ -76,11 +76,11 @@ def launch_monkey_event(package, seed=None, events="50000", throttle="500"):
                                "--throttle", throttle,
                                "--pct-majornav", "0",
                                "--pct-syskeys", "0",
-                               "--pct-touch", "25",
-                               "--pct-nav", "25",
-                               "--pct-appswitch", "25",
+                               "--pct-touch", "15",
+                               "--pct-nav", "15",
+                               "--pct-appswitch", "50",
                                "--pct-anyevent", "0",
-                               "--pct-motion", "25",
+                               "--pct-motion", "20",
                                "--kill-process-after-error",
                                events))
 
