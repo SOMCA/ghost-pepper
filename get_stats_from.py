@@ -60,8 +60,6 @@ def get_global_stats(files_content, only_mean=False):
 def main():
     parser = argparse.ArgumentParser(
         description="Get stats from Powertool output")
-    parser.add_argument('-d', '--deterministic', type=int,
-                        help="Remove the n first values from data")
     parser.add_argument('-g', '--globalst', action="store_true", default=False,
                         help="Get only global values")
     parser.add_argument('-m', '--mean', action="store_true", default=False,
