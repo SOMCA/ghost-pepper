@@ -8,6 +8,7 @@ from glob import glob
 VOLTAGE_NEXUS_4 = 3.8
 
 
+# Get stats values from each file in the working directory
 def get_stats_from(files_names,
                    files_content,
                    only_mean=False,
@@ -37,6 +38,7 @@ def get_stats_from(files_names,
     return stats_by_file
 
 
+# Get stats values from all files in the working directory
 def get_global_stats(files_content, only_mean=False):
     data = [files_content[f] for f in files_content]
     print("GLOBAL STATS")
