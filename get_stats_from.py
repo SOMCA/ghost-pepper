@@ -16,49 +16,45 @@ def get_stats_from(files_names,
     for i in files_content:
         file_content = files_content[i]
         if not globalst:
-            if not only_mean:
-                file_name = files_names[i - 1]
-                print("FILE - {0} measures: {1}"
-                      .format(len(file_content), file_name))
-                print("\t*MEAN : {0}mA"
-                      .format(statistics.mean(file_content)))
-                print("\t*MEDIAN : {0}mA"
-                      .format(statistics.median(file_content)))
+            file_name = files_names[i - 1]
+            print("FILE {0} ({1} measures)"
+                  .format(len(file_content), file_name))
+            print("\t*MEAN : %.2fmA"
+                  % statistics.mean(file_content))
+            if only_mean:
+                print("\t*MEDIAN : %.2fmA"
+                      % statistics.median(file_content))
                 try:
-                    print("\t*MOST TYPICAL VALUE : {0}mA"
-                          .format(statistics.mode(file_content)))
+                    print("\t*MOST TYPICAL VALUE : %.2fmA"
+                          % statistics.mode(file_content))
                 except:
-                    print("2 most typical values!")
-                print("\t*STANDARD DEVIATION : {0}mA"
-                      .format(statistics.stdev(file_content)))
-                print("\t*VARIANCE : {0}"
-                      .format(statistics.variance(file_content)))
-            else:
-                print("{0}mA"
-                      .format(statistics.mean(file_content)))
+                    print("\t2 most typical values!")
+                print("\t*STANDARD DEVIATION : %.2fmA"
+                      % statistics.stdev(file_content))
+                print("\t*VARIANCE : %.2f"
+                      % statistics.variance(file_content))
         stats_by_file[i] = statistics.mean(file_content)
     return stats_by_file
 
 
 def get_global_stats(files_content, only_mean=False):
     data = [files_content[f] for f in files_content]
+    print("GLOBAL STATS")
+    print("############")
+    print("\t*GLOBAL MEAN : %.2fmA"
+          % statistics.mean(data))
     if not only_mean:
-        print("*GLOBAL MEAN : {0}mA"
-              .format(statistics.mean(data)))
-        print("*GLOBAL MEDIAN : {0}mA"
-              .format(statistics.median(data)))
+        print("\t*GLOBAL MEDIAN : %.2fmA"
+              % statistics.median(data))
         try:
-            print("*GLOBAL MOST TYPICAL VALUE : {0}mA"
-                  .format(statistics.mode(data)))
+            print("\t*GLOBAL MOST TYPICAL VALUE : %.2fmA"
+                  % statistics.mode(data))
         except:
-            print("2 most typical values!")
-        print("*GLOBAL STANDARD DEVIATION : {0}mA"
-              .format(statistics.stdev(data)))
-        print("*GLOBAL VARIANCE : {0}"
-              .format(statistics.variance(data)))
-    else:
-        print("*GLOBAL MEAN : {0}mA"
-              .format(statistics.mean(data)))
+            print("\t2 most typical values!")
+        print("\t*GLOBAL STANDARD DEVIATION : %.2fmA"
+              % statistics.stdev(data))
+        print("\t*GLOBAL VARIANCE : %.2f"
+              % statistics.variance(data))
 
 
 def main():
@@ -99,12 +95,12 @@ def main():
             # Get the index of the installation time for the current project
             installation_time_index = current_time\
                 .index(installation_times[current_number_file])
-            # Get the `installation_time_index` first values
+            # Get the `installation_time_index` first time values
             current_time = current_time[installation_time_index:]
-            measures = [float(row[1]) for row in flow
-                        if not (re.match("^\d+?\.\d+?$", row[1]) is None)]
-            # Get the `installation_time_index` first values
-            measures = measures[installation_time_index:]
+            # Get the `installation_time_index` first measures
+            measures = [float(row[1]) for i, row in enumerate(flow)
+                        if not (re.match("^\d+?\.\d+?$", row[1]) is None) and
+                        i >= installation_time_index]
             mean_by_file[int(csv_file_pointer
                              .split('.csv')[0][-2::]
                              .replace("_", ""))] = measures
@@ -124,14 +120,14 @@ def main():
             VOLTAGE_NEXUS_4 * (stats_by_file[i] / 1000) * times[i - 1]
         energies.append(average_energy_for_i)
 
-    print("*GLOBAL MEAN POWER: %.2fJ" %
+    print("\t*GLOBAL MEAN POWER: %.2fJ" %
           round(sum(energies)/len(energies), 2))
 
-    print("*GLOBAL MEAN EXECUTION TIME: %.2fs" %
-          round(sum(times)/len(times), 2))
-
-    print("*GLOBAL MEAN INSTALLATION TIME: %.3fs" %
+    print("\t*GLOBAL MEAN INSTALLATION TIME: %.3fs" %
           round(sum(installation_times)/len(installation_times), 2))
+
+    print("\t*GLOBAL MEAN EXECUTION TIME: %.2fs" %
+          round(sum(times)/len(times), 2))
 
 if __name__ == '__main__':
     main()
