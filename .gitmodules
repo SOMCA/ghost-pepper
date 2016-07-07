@@ -1,0 +1,3 @@
+[submodule "src/lib/utils"]
+	path = src/lib/utils
+	url = https://github.com/SOMCA/hot-pepper-utils
