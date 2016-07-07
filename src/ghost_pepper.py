@@ -1,4 +1,4 @@
-from lib.adb_utils import call_command, get_output,\
+from lib.utils.adb_utils import call_command, get_output,\
      launch_monkey_event, enable_simiasque
 from lib.count import count_global_cs, rank
 from lib.monkey import MonkeyDetails
