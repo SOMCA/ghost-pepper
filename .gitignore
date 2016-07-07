@@ -2,6 +2,7 @@ src/lib/utils/
 __pycache__/
 *.swp
 .ropeproject/
+test/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
